@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreelanceManager | 우선순위 관리</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #252b40;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 22px 8%;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 45px auto;
+            padding: 0 24px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #777e90;
+            margin-bottom: 32px;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .card, .task-list {
+            background: white;
+            border: 1px solid #e8eaf0;
+            border-radius: 14px;
+            padding: 24px;
+        }
+
+        .label {
+            color: #777e90;
+            font-size: 14px;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            font-size: 20px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 0;
+            border-top: 1px solid #edf0f4;
+        }
+
+        .rank {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #eceeff;
+            font-weight: bold;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-name {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .task-meta {
+            color: #777e90;
+            font-size: 13px;
+        }
+
+        .priority {
+            background: #fff0d8;
+            color: #946200;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin-top: 28px;
+                padding: 0 16px;
+            }
+
+            .summary {
+                gap: 8px;
+            }
+
+            .card {
+                padding: 14px 10px;
+            }
+
+            .number {
+                font-size: 24px;
+            }
+
+            .task {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="brand">FreelanceManager</div>
+</header>
+
+<main>
+    <h1>오늘 어떤 일부터 해야 할까?</h1>
+    <p class="description">
+        해야 할 일을 정리하고, 지금 가장 중요한 일에 집중하세요.
+    </p>
+
+    <section class="summary">
+        <div class="card">
+            <div class="label">전체 할 일</div>
+            <div class="number">3</div>
+        </div>
+
+        <div class="card">
+            <div class="label">완료한 일</div>
+            <div class="number">1</div>
+        </div>
+
+        <div class="card">
+            <div class="label">남은 일</div>
+            <div class="number">2</div>
+        </div>
+    </section>
+
+    <section class="task-list">
+        <div class="section-title">
+            <h2>우선순위 목록</h2>
+            <span class="label">우선순위순</span>
+        </div>
+
+        <div class="task">
+            <div class="rank">1</div>
+            <div class="task-info">
+                <div class="task-name">프로젝트 기능 구현</div>
+                <div class="task-meta">오늘 마감 · 예상 2시간</div>
+            </div>
+            <span class="priority">높음</span>
+        </div>
+
+        <div class="task">
+            <div class="rank">2</div>
+            <div class="task-info">
+                <div class="task-name">SQLD 공부</div>
+                <div class="task-meta">내일 마감 · 예상 1시간</div>
+            </div>
+            <span class="priority">보통</span>
+        </div>
+
+        <div class="task">
+            <div class="rank">3</div>
+            <div class="task-info">
+                <div class="task-name">개발 기록 작성</div>
+                <div class="task-meta">3일 남음 · 예상 30분</div>
+            </div>
+            <span class="priority">보통</span>
+        </div>
+    </section>
+</main>
+</body>
+</html>

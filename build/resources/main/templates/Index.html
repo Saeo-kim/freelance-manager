@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus | Freelance Manager</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: Arial, "Malgun Gothic", sans-serif;
+            background: #f7f7f5;
+            color: #29272f;
+        }
+        .layout { display: flex; min-height: 100vh; }
+        aside {
+            width: 220px; padding: 30px 20px;
+            background: white; border-right: 1px solid #e8e7e3;
+        }
+        .logo { font-size: 22px; font-weight: bold; margin-bottom: 40px; }
+        nav a {
+            display: block; padding: 13px; margin-bottom: 8px;
+            color: #777; text-decoration: none; border-radius: 9px;
+        }
+        nav a.active { background: #f0ebfa; color: #765ca7; font-weight: bold; }
+        main { flex: 1; max-width: 1200px; padding: 40px; margin: 0 auto; }
+        .eyebrow { color: #8069ac; font-size: 12px; font-weight: bold; letter-spacing: 1.5px; }
+        h1 { font-size: 34px; margin-bottom: 10px; }
+        h2 { font-size: 21px; }
+        .muted { color: #888; }
+        .hero, .panel, .stat {
+            background: white; border: 1px solid #e9e7e3; border-radius: 15px;
+        }
+        .hero { padding: 28px; margin: 28px 0; }
+        .hero h2 { font-size: 25px; }
+        button {
+            border: 0; border-radius: 8px; padding: 12px 17px;
+            cursor: pointer; font-weight: bold;
+        }
+        .primary { background: #29272f; color: white; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 35px; }
+        .stat { padding: 20px; }
+        .stat strong { display: block; font-size: 30px; margin-top: 10px; }
+        .task-form { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr auto; gap: 10px; margin-bottom: 22px; }
+        input, select {
+            width: 100%; min-width: 0; padding: 12px;
+            border: 1px solid #deddd8; border-radius: 8px;
+            background: white; font: inherit;
+        }
+        .panel { padding: 22px; }
+        .task {
+            display: flex; align-items: center; gap: 13px;
+            padding: 17px 0; border-bottom: 1px solid #eee;
+        }
+        .task:last-child { border-bottom: 0; }
+        .task input[type="checkbox"] { width: 18px; height: 18px; }
+        .task-info { flex: 1; }
+        .task-name { font-weight: bold; overflow-wrap: anywhere; }
+        .task-meta { margin-top: 6px; font-size: 12px; color: #888; }
+        .badge { padding: 7px 9px; background: #f0ebfa; color: #765ca7; border-radius: 7px; font-size: 12px; white-space: nowrap; }
+        .done .task-name { text-decoration: line-through; color: #999; }
+        .delete { background: transparent; color: #999; font-size: 20px; padding: 5px; }
+        .empty { text-align: center; padding: 30px; color: #888; }
+        @media(max-width: 850px) {
+            .layout { display: block; }
+            aside { width: 100%; padding: 18px; }
+            .logo { margin-bottom: 15px; }
+            nav { display: flex; gap: 5px; }
+            nav a { padding: 10px; }
+            main { padding: 22px 15px; }
+            .task-form { grid-template-columns: 1fr 1fr; }
+            .task-form input:first-child { grid-column: 1 / -1; }
+            h1 { font-size: 27px; }
+        }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside>
+        <div class="logo">◈ Focus.</div>
+        <nav>
+            <a class="active" href="#dashboard">오늘의 업무</a>
+            <a href="#tasks">할 일 관리</a>
+        </nav>
+    </aside>
+
+    <main>
+        <div class="eyebrow">YOUR PERSONAL WORKSPACE</div>
+        <h1>오늘, 무엇부터 할까요?</h1>
+        <p class="muted">모든 일을 한꺼번에 할 필요는 없어요. 하나씩 해결해 봅시다.</p>
+
+        <section class="hero" id="dashboard">
+            <div class="eyebrow">NEXT BEST ACTION</div>
+            <h2 id="nextTitle">아직 등록된 업무가 없어요.</h2>
+            <p class="muted" id="nextReason">할 일을 등록하면 우선순위를 추천해 드릴게요.</p>
+            <button class="primary" id="focusButton" type="button">할 일 추가하기</button>
+        </section>
+
+        <section class="stats">
+            <div class="stat"><span class="muted">남은 업무</span><strong id="remainingCount">0</strong></div>
+            <div class="stat"><span class="muted">오늘 마감</span><strong id="todayCount">0</strong></div>
+            <div class="stat"><span class="muted">완료한 업무</span><strong id="doneCount">0</strong></div>
+        </section>
+
+        <section id="tasks">
+            <h2>할 일 관리</h2>
+            <form class="task-form" id="taskForm">
+                <input id="taskName" placeholder="어떤 일을 해야 하나요?" maxlength="100" required>
+                <input id="dueDate" type="date" aria-label="마감일" required>
+                <select id="importance" aria-label="중요도">
+                    <option value="3">중요도 높음</option>
+                    <option value="2" selected>중요도 보통</option>
+                    <option value="1">중요도 낮음</option>
+                </select>
+                <input id="duration" type="number" min="5" max="1440" step="5" value="30" aria-label="예상 시간(분)">
+                <button class="primary" type="submit">+ 추가</button>
+            </form>
+
+            <div class="panel">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                    <h2>추천 우선순위</h2>
+                    <span class="muted" id="taskCount">0개 등록</span>
+                </div>
+                <div id="taskList"><div class="empty">첫 번째 할 일을 등록해 보세요.</div></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    const KEY = "freelance-manager-tasks";
+    let tasks = [];
+
+    try {
+        tasks = JSON.parse(localStorage.getItem(KEY) || "[]");
+        if (!Array.isArray(tasks)) tasks = [];
+    } catch (e) {
+        tasks = [];
+    }
+
+    const $ = id => document.getElementById(id);
+
+    function dateString(date) {
+        return date.getFullYear() + "-" +
+            String(date.getMonth() + 1).padStart(2, "0") + "-" +
+            String(date.getDate()).padStart(2, "0");
+    }
+
+    const today = dateString(new Date());
+    $("dueDate").value = today;
+
+    function score(task) {
+        const days = Math.ceil(
+            (new Date(task.dueDate + "T00:00:00") -
+                new Date(today + "T00:00:00")) / 86400000
+        );
+
+        let result = Number(task.importance) * 3;
+
+        if (days < 0) result += 10;
+        else if (days === 0) result += 8;
+        else if (days === 1) result += 6;
+        else if (days <= 3) result += 4;
+        else if (days <= 7) result += 2;
+
+        result += Math.max(0, 1 - Number(task.duration) / 120);
+        return result;
+    }
+
+    function save() {
+        localStorage.setItem(KEY, JSON.stringify(tasks));
+    }
+
+    function render() {
+        const pending = tasks.filter(t => !t.done)
+            .sort((a, b) => score(b) - score(a));
+        const completed = tasks.filter(t => t.done);
+
+        $("remainingCount").textContent = pending.length;
+        $("todayCount").textContent = pending.filter(t => t.dueDate === today).length;
+        $("doneCount").textContent = completed.length;
+        $("taskCount").textContent = tasks.length + "개 등록";
+
+        if (pending.length) {
+            const next = pending[0];
+            $("nextTitle").textContent = next.name;
+            $("nextReason").textContent =
+                "마감 " + next.dueDate + " · 예상 " + next.duration +
+                "분 · 중요도 " + ["", "낮음", "보통", "높음"][next.importance];
+
+            $("focusButton").textContent = "첫 번째 업무로 이동";
+            $("focusButton").onclick = () => {
+                $("task-" + next.id)?.scrollIntoView({
+                    behavior: "smooth", block: "center"
+                });
+            };
+        } else {
+            $("nextTitle").textContent = completed.length
+                ? "모든 업무를 완료했어요!"
+                : "아직 등록된 업무가 없어요.";
+            $("nextReason").textContent = "할 일을 추가하고 오늘의 우선순위를 정해 보세요.";
+            $("focusButton").textContent = "할 일 추가하기";
+            $("focusButton").onclick = () => $("taskName").focus();
+        }
+
+        const list = $("taskList");
+        list.replaceChildren();
+
+        if (!tasks.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty";
+            empty.textContent = "첫 번째 할 일을 등록해 보세요.";
+            list.appendChild(empty);
+            return;
+        }
+
+        [...pending, ...completed].forEach((task, index) => {
+            const row = document.createElement("div");
+            row.className = "task" + (task.done ? " done" : "");
+            row.id = "task-" + task.id;
+
+            const check = document.createElement("input");
+            check.type = "checkbox";
+            check.checked = task.done;
+            check.setAttribute("aria-label", task.name + " 완료");
+            check.addEventListener("change", () => {
+                task.done = check.checked;
+                save();
+                render();
+            });
+
+            const info = document.createElement("div");
+            info.className = "task-info";
+
+            const name = document.createElement("a");
+            name.className = "task-name";
+            name.textContent = task.name;
+            name.href = "/projects/" + encodeURIComponent(task.id);
+            name.style.cursor = "pointer";
+            name.style.textDecoration = "none";
+            name.style.color = "inherit";
+
+            const meta = document.createElement("div");
+            meta.className = "task-meta";
+            meta.textContent = "마감 " + task.dueDate + " · " +
+                task.duration + "분 · 중요도 " +
+                ["", "낮음", "보통", "높음"][task.importance];
+
+            info.append(name, meta);
+
+            const badge = document.createElement("span");
+            badge.className = "badge";
+            badge.textContent = task.done ? "완료" : (index === 0 ? "먼저 하기" : "대기");
+
+            const remove = document.createElement("button");
+            remove.className = "delete";
+            remove.type = "button";
+            remove.textContent = "×";
+            remove.setAttribute("aria-label", task.name + " 삭제");
+            remove.addEventListener("click", () => {
+                tasks = tasks.filter(t => t.id !== task.id);
+                save();
+                render();
+            });
+
+            row.append(check, info, badge, remove);
+            list.appendChild(row);
+        });
+    }
+
+    $("taskForm").addEventListener("submit", event => {
+        event.preventDefault();
+
+        const name = $("taskName").value.trim();
+        const dueDate = $("dueDate").value;
+        const duration = Number($("duration").value);
+
+        if (!name || !dueDate || duration < 5 || duration > 1440) {
+            alert("업무명, 마감일, 예상 시간을 확인해 주세요.");
+            return;
+        }
+
+        tasks.push({
+            id: Date.now().toString() + Math.random().toString(16).slice(2),
+            name,
+            dueDate,
+            importance: Number($("importance").value),
+            duration,
+            done: false
+        });
+
+        save();
+        $("taskName").value = "";
+        $("duration").value = "30";
+        render();
+        $("taskName").focus();
+    });
+
+    render();
+</script>
+</body>
+</html>
