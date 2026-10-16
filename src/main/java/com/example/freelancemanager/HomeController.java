@@ -1,4 +1,3 @@
-
 package com.example.freelancemanager;
 
 import org.springframework.stereotype.Controller;
@@ -9,6 +8,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "project_list";
     }
 }

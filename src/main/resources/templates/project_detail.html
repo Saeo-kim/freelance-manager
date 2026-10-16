@@ -66,6 +66,8 @@
         <img id="preview" alt="첨부 이미지 미리보기"
              style="display:none; max-width:100%; margin-bottom:15px;">
 
+        <button type="button" id="removeImageButton">이미지 삭제</button>
+
         <button type="submit">저장하기</button>
         <p id="message" class="message"></p>
     </form>
@@ -80,6 +82,16 @@
     const imageInput = document.getElementById("image");
     const preview = document.getElementById("preview");
     const message = document.getElementById("message");
+
+    const removeImageButton = document.getElementById("removeImageButton");
+
+    removeImageButton.addEventListener("click", () => {
+        imageData = "";
+        imageInput.value = "";
+        preview.removeAttribute("src");
+        preview.style.display = "none";
+        message.textContent = "이미지를 삭제했어요. 저장하기를 눌러 변경 사항을 반영하세요.";
+    });
 
     let imageData = "";
 
@@ -107,21 +119,59 @@
             return;
         }
 
-        if (file.size > 1024 * 1024) {
-            alert("현재는 1MB 이하의 이미지만 첨부할 수 있어요.");
+
+        if (file.size > 10 * 1024 * 1024) {
+            alert("현재는 10MB 이하의 이미지만 첨부할 수 있어요.");
             imageInput.value = "";
             return;
         }
 
+
+
         const reader = new FileReader();
 
         reader.onload = () => {
-            imageData = reader.result;
-            preview.src = imageData;
-            preview.style.display = "block";
+            const originalImage = new Image();
+
+            originalImage.onload = () => {
+                const canvas = document.createElement("canvas");
+
+                // 이미지의 긴 변을 최대 800px로 축소
+                const maxSize = 800;
+                const ratio = Math.min(
+                    1,
+                    maxSize / Math.max(originalImage.width, originalImage.height)
+                );
+
+                canvas.width = Math.round(originalImage.width * ratio);
+                canvas.height = Math.round(originalImage.height * ratio);
+
+                const context = canvas.getContext("2d");
+                context.drawImage(
+                    originalImage,
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+                // JPEG 품질을 60%로 낮춰 용량 줄이기
+                imageData = canvas.toDataURL("image/jpeg", 0.6);
+
+                preview.src = imageData;
+                preview.style.display = "block";
+                message.textContent = "이미지를 압축했어요. 저장하기를 눌러 주세요.";
+            };
+
+            originalImage.onerror = () => {
+                message.textContent = "이미지를 읽지 못했어요. 다른 파일을 선택해 주세요.";
+            };
+
+            originalImage.src = reader.result;
         };
 
         reader.readAsDataURL(file);
+
     });
 
     document.getElementById("detailForm")
@@ -129,14 +179,25 @@
             event.preventDefault();
 
             try {
+
                 localStorage.setItem(key, JSON.stringify({
                     description: description.value,
                     image: imageData
                 }));
+
+// 메인 대시보드 추천 카드에서도 같은 이미지를 사용
+                if (imageData) {
+                    localStorage.setItem("freelance-manager-next-action-image", imageData);
+                } else {
+                    localStorage.removeItem("freelance-manager-next-action-image");
+                }
+
                 message.textContent = "저장했어요.";
+
             } catch (error) {
+                console.error("저장 실패 원인:", error);
                 message.textContent =
-                    "저장에 실패했어요. 이미지 크기를 줄여 다시 시도해 주세요.";
+                    "저장 실패: " + error.name + " - " + error.message;
             }
         });
 </script>

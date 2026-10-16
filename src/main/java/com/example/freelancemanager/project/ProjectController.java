@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class ProjectController {
 
-    @GetMapping("/projects")
+    @GetMapping({ "/projects"})
     public String home() {
-        return "task_list";
+        return "project_list";
     }
 
     @GetMapping("/projects/{id}")

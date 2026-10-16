@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -10,11 +11,19 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #5b61e6;
+            --background: #f6f7fb;
+            --text: #252b40;
+            --muted: #777e90;
+            --border: #e8eaf0;
+        }
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: #f6f7fb;
-            color: #252b40;
+            background: var(--background);
+            color: var(--text);
         }
 
         header {
@@ -40,8 +49,9 @@
         }
 
         .description {
-            color: #777e90;
+            color: var(--muted);
             margin-bottom: 32px;
+            line-height: 1.6;
         }
 
         .summary {
@@ -51,15 +61,17 @@
             margin-bottom: 30px;
         }
 
-        .card, .task-list {
+        .card,
+        .task-list,
+        .rolling-section {
             background: white;
-            border: 1px solid #e8eaf0;
+            border: 1px solid var(--border);
             border-radius: 14px;
             padding: 24px;
         }
 
         .label {
-            color: #777e90;
+            color: var(--muted);
             font-size: 14px;
         }
 
@@ -69,15 +81,266 @@
             margin-top: 12px;
         }
 
+        /* Next Best Action */
+
+        .next-action {
+            display: block;
+            width: 100%;
+            margin-bottom: 30px;
+            padding: 0;
+            border: 1px solid #dfe1ff;
+            border-radius: 18px;
+            background: white;
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .next-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(60, 65, 140, 0.10);
+        }
+
+        .next-action:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 3px;
+        }
+
+        .next-action-inner {
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 30px;
+            min-height: 220px;
+        }
+
+        .next-action-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+        }
+
+        .next-action h2 {
+            font-size: 27px;
+            line-height: 1.4;
+            margin: 0 0 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .next-description {
+            color: var(--muted);
+            line-height: 1.7;
+            margin: 0 0 20px;
+        }
+
+        .next-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .meta-chip {
+            background: #f0f1ff;
+            color: #4c51c7;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .detail-hint {
+            margin-top: auto;
+            padding-top: 10px;
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .next-action-image {
+            flex: 0 0 210px;
+            width: 210px;
+            min-height: 160px;
+            align-self: stretch;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f0f1ff;
+            display: none;
+        }
+
+        .next-action-image.visible {
+            display: block;
+        }
+
+        .next-action-image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            min-height: 160px;
+            object-fit: cover;
+        }
+
+        .image-tools {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .upload-button,
+        .reset-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .upload-button:hover,
+        .reset-button:hover {
+            background: #f5f5ff;
+            border-color: #c9cbff;
+        }
+
+        .image-help {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Rolling task list */
+
+        .rolling-section {
+            margin-bottom: 30px;
+            padding: 24px;
+        }
+
         .section-title {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
             margin-bottom: 18px;
         }
 
         .section-title h2 {
             font-size: 20px;
+            margin: 0;
+        }
+
+        .rolling-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin: -5px 0 18px;
+        }
+
+        .rolling-window {
+            height: 270px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            scroll-behavior: smooth;
+            border-radius: 12px;
+            background: #fafbfe;
+            scrollbar-width: thin;
+            scrollbar-color: #c9cbe0 transparent;
+        }
+
+        .rolling-window::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        .rolling-window::-webkit-scrollbar-thumb {
+            background: #c9cbe0;
+            border-radius: 10px;
+        }
+
+        .rolling-task {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-height: 86px;
+            padding: 16px;
+            border-bottom: 1px solid #edf0f4;
+            background: white;
+        }
+
+        .rolling-task:last-child {
+            border-bottom: none;
+        }
+
+        .rolling-rank {
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            background: #eceeff;
+            color: #4c51c7;
+            font-weight: bold;
+        }
+
+        .rolling-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .rolling-name {
+            font-weight: bold;
+            margin-bottom: 7px;
+            overflow-wrap: anywhere;
+        }
+
+        .rolling-meta {
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .rolling-priority {
+            flex-shrink: 0;
+            background: #fff0d8;
+            color: #946200;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+
+        .rolling-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .scroll-position {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Existing priority list */
+
+        .task-list {
+            margin-bottom: 40px;
         }
 
         .task {
@@ -91,6 +354,7 @@
         .rank {
             width: 40px;
             height: 40px;
+            flex: 0 0 40px;
             display: grid;
             place-items: center;
             border-radius: 10px;
@@ -100,6 +364,7 @@
 
         .task-info {
             flex: 1;
+            min-width: 0;
         }
 
         .task-name {
@@ -108,7 +373,7 @@
         }
 
         .task-meta {
-            color: #777e90;
+            color: var(--muted);
             font-size: 13px;
         }
 
@@ -118,12 +383,21 @@
             padding: 7px 10px;
             border-radius: 8px;
             font-size: 12px;
+            white-space: nowrap;
         }
 
         @media (max-width: 600px) {
+            header {
+                padding: 18px 20px;
+            }
+
             main {
                 margin-top: 28px;
                 padding: 0 16px;
+            }
+
+            h1 {
+                font-size: 26px;
             }
 
             .summary {
@@ -138,8 +412,56 @@
                 font-size: 24px;
             }
 
+            .next-action-inner {
+                padding: 20px;
+                gap: 12px;
+                min-height: 170px;
+            }
+
+            .next-action h2 {
+                font-size: 21px;
+            }
+
+            .next-action-image {
+                flex-basis: 105px;
+                width: 105px;
+                min-height: 120px;
+            }
+
+            .next-action-image img {
+                min-height: 120px;
+            }
+
+            .rolling-section,
+            .task-list {
+                padding: 16px;
+            }
+
+            .rolling-window {
+                height: 250px;
+            }
+
+            .rolling-task {
+                gap: 10px;
+                padding: 14px 10px;
+            }
+
+            .rolling-priority {
+                font-size: 11px;
+                padding: 6px 7px;
+            }
+
             .task {
                 gap: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
             }
         }
     </style>
@@ -173,6 +495,108 @@
         </div>
     </section>
 
+    <!-- 메인 추천 카드: 카드 전체 클릭 시 상세보기 -->
+    <section aria-labelledby="nextActionHeading">
+        <button
+                type="button"
+                class="next-action"
+                id="nextActionCard"
+                aria-label="추천 할 일 상세보기"
+
+        >
+            <div class="next-action-inner">
+                <div class="next-action-content">
+                    <div class="eyebrow">NEXT BEST ACTION</div>
+
+                    <h2 id="nextActionHeading">프로젝트 기능 구현</h2>
+
+                    <p class="next-description" id="nextActionDescription">
+                        지금 가장 중요한 작업을 완료하고 프로젝트를 한 단계
+                        발전시켜 보세요.
+                    </p>
+
+                    <div class="next-meta">
+                        <span class="meta-chip">우선순위 높음</span>
+                        <span class="meta-chip">예상 2시간</span>
+                        <span class="meta-chip">오늘 마감</span>
+                    </div>
+
+                    <div class="detail-hint">상세보기 열기 ↗</div>
+                </div>
+
+                <div class="next-action-image" id="nextActionImage">
+                    <img id="nextActionImagePreview" alt="추천 할 일 이미지">
+                </div>
+            </div>
+        </button>
+
+        <input type="file" id="taskImageInput" accept="image/*" hidden>
+        <button type="button" id="removeImageButton" hidden>이미지 제거</button>
+
+    </section>
+
+    <!-- 마우스 휠로 탐색하는 목록 -->
+    <section class="rolling-section">
+        <div class="section-title">
+            <h2>할 일 롤링 목록</h2>
+            <span class="label">전체 할 일</span>
+        </div>
+
+        <p class="rolling-description">
+            목록 위에서 마우스 휠을 움직여 할 일을 탐색하세요.
+            Reset을 누르면 가장 위로 돌아갑니다.
+        </p>
+
+        <div
+                class="rolling-window"
+                id="rollingWindow"
+                tabindex="0"
+                aria-label="스크롤 가능한 할 일 목록"
+        >
+            <div class="rolling-task">
+                <div class="rolling-rank">1</div>
+                <div class="rolling-info">
+                    <div class="rolling-name">프로젝트 기능 구현</div>
+                    <div class="rolling-meta">오늘 마감 · 예상 2시간</div>
+                </div>
+                <span class="rolling-priority">높음</span>
+            </div>
+
+            <div class="rolling-task">
+                <div class="rolling-rank">2</div>
+                <div class="rolling-info">
+                    <div class="rolling-name">SQLD 공부</div>
+                    <div class="rolling-meta">내일 마감 · 예상 1시간</div>
+                </div>
+                <span class="rolling-priority">보통</span>
+            </div>
+
+            <div class="rolling-task">
+                <div class="rolling-rank">3</div>
+                <div class="rolling-info">
+                    <div class="rolling-name">개발 기록 작성</div>
+                    <div class="rolling-meta">3일 남음 · 예상 30분</div>
+                </div>
+                <span class="rolling-priority">보통</span>
+            </div>
+        </div>
+
+        <div class="rolling-footer">
+            <span class="scroll-position" id="scrollPosition">
+                목록 맨 위
+            </span>
+
+            <button
+                    type="button"
+                    class="reset-button"
+                    id="resetRollingButton"
+            >
+                ↺ Reset
+            </button>
+        </div>
+    </section>
+
+    <!-- 기존 하단 목록 유지 -->
     <section class="task-list">
         <div class="section-title">
             <h2>우선순위 목록</h2>
@@ -207,5 +631,140 @@
         </div>
     </section>
 </main>
+
+
+<script>
+    const NEXT_TASK_ID = 1;
+    const IMAGE_STORAGE_KEY = "freelance-manager-next-action-image";
+
+    const nextActionCard = document.getElementById("nextActionCard");
+    const taskImageInput = document.getElementById("taskImageInput");
+    const nextActionImage = document.getElementById("nextActionImage");
+    const imagePreview = document.getElementById("nextActionImagePreview");
+    const removeImageButton = document.getElementById("removeImageButton");
+
+    const rollingWindow = document.getElementById("rollingWindow");
+    const resetRollingButton = document.getElementById("resetRollingButton");
+    const scrollPosition = document.getElementById("scrollPosition");
+
+    // 카드 클릭 시 상세 페이지 이동
+    nextActionCard.addEventListener("click", function () {
+        window.location.href = "/projects/" + NEXT_TASK_ID;
+    });
+
+    // 이미지 표시
+    function showImage(imageData) {
+        if (!imageData) {
+            imagePreview.removeAttribute("src");
+            nextActionImage.classList.remove("visible");
+            removeImageButton.hidden = true;
+            return;
+        }
+
+        imagePreview.src = imageData;
+        nextActionImage.classList.add("visible");
+        removeImageButton.hidden = false;
+    }
+
+    // 저장된 이미지 불러오기
+    try {
+        const savedImage = localStorage.getItem(IMAGE_STORAGE_KEY);
+
+        if (savedImage) {
+            showImage(savedImage);
+        }
+    } catch (error) {
+        console.error("이미지 복원 실패:", error);
+    }
+
+    // 이미지 선택
+    taskImageInput.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+
+        alert("이미지 선택 이벤트 실행됨!");
+
+        if (!file) return;
+
+        alert("선택한 파일: " + file.name);
+
+        if (!file.type.startsWith("image/")) {
+            alert("이미지 파일을 선택해 주세요.");
+            taskImageInput.value = "";
+            return;
+        }
+
+        // 지나치게 큰 이미지 방지
+        if (file.size > 1024 * 1024) {
+            alert("현재는 1MB 이하의 이미지만 첨부할 수 있어요.");
+            taskImageInput.value = "";
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function () {
+            const imageData = reader.result;
+
+            // 먼저 화면에 표시
+            showImage(imageData);
+
+            // 브라우저에 저장
+            try {
+                localStorage.setItem(IMAGE_STORAGE_KEY, imageData);
+            } catch (error) {
+                console.error("이미지 저장 실패:", error);
+
+                alert(
+                    "이미지는 화면에 표시했지만 저장하지 못했어요. " +
+                    "브라우저 저장 공간을 확인해 주세요."
+                );
+            }
+        };
+
+        reader.onerror = function () {
+            alert("이미지를 읽지 못했어요. 다른 파일을 선택해 주세요.");
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    // 이미지 제거
+    removeImageButton.addEventListener("click", function () {
+        try {
+            localStorage.removeItem(IMAGE_STORAGE_KEY);
+        } catch (error) {
+            console.error("이미지 삭제 실패:", error);
+        }
+
+        taskImageInput.value = "";
+        showImage(null);
+    });
+
+    // 롤링 목록 위치 표시
+    function updateScrollPosition() {
+        const maxScroll =
+            rollingWindow.scrollHeight - rollingWindow.clientHeight;
+
+        if (rollingWindow.scrollTop <= 2) {
+            scrollPosition.textContent = "목록 맨 위";
+        } else if (maxScroll - rollingWindow.scrollTop <= 2) {
+            scrollPosition.textContent = "목록 맨 아래";
+        } else {
+            scrollPosition.textContent = "목록 탐색 중";
+        }
+    }
+
+    rollingWindow.addEventListener("scroll", updateScrollPosition);
+
+    resetRollingButton.addEventListener("click", function () {
+        rollingWindow.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+    updateScrollPosition();
+</script>
+
 </body>
 </html>
